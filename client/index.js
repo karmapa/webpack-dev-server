@@ -58,10 +58,18 @@ var onSocketMsg = {
 };
 
 var newConnection = function() {
+	var hostname = urlParts.hostname;
+
+	if (urlParts.hostname === '0.0.0.0') {
+		if (window.location.hostname && !!~window.location.protocol.indexOf('http')) {
+			hostname = window.location.hostname;
+		}
+	}
+
 	sock = new SockJS(url.format({
 		protocol: urlParts.protocol,
 		auth: urlParts.auth,
-		hostname: (urlParts.hostname === '0.0.0.0') ? window.location.hostname : urlParts.hostname,
+		hostname: hostname,
 		port: urlParts.port,
 		pathname: urlParts.path === '/' ? "/sockjs-node" : urlParts.path
 	}));
